@@ -4,7 +4,7 @@ from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
 from dotenv import load_dotenv
 
-from val_api import get_rank, default
+from val_api import help, default, get_rank
 
 
 load_dotenv()
@@ -21,12 +21,15 @@ def verify_signature(event, raw_body):
 
 def process_request(raw_request):
     data = raw_request["data"]
+    member = raw_request["member"]
     command_name = data["name"]
 
     if command_name == "default":
-        message_content = default(data, raw_request["member"])
+        message_content = default(data, member)
     elif command_name == "rank":
-        message_content = get_rank(data)
+        message_content = get_rank(data, member)
+    elif command_name == "help":
+        message_content = help()
     return message_content
 
 def handler(event, context):
@@ -43,7 +46,10 @@ def handler(event, context):
     if raw_request["type"] == 1:  # PING
         response_data = {"type": 1}  # PONG
     else:
-        message_content = process_request(raw_request)
+        try:
+            message_content = process_request(raw_request)
+        except Exception as e:
+            message_content = f"Request error: {e}"
 
         response_data = {
             "type": 4,
