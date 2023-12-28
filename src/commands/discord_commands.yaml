@@ -1,0 +1,39 @@
+- name: default
+  description: Sets a default user account to retrieve info from.
+  options:
+    - name: username
+      description: The account username.
+      type: 3 # string
+      required: true
+    - name: tag
+      description: The account tag.
+      type: 3 # string
+      required: true
+
+- name: rank
+  description: Retrieves the current rank and rank rating of the requested user.
+  options:
+    - name: username
+      description: The account username.
+      type: 3 # string
+      required: false
+    - name: tag
+      description: The account tag.
+      type: 3 # string
+      required: false
+
+- name: recent
+  description: Retrieves stats from the most recent match of a selected game mode.
+  options:
+    - name: mode
+      description: The game mode.
+      type: 3 # string
+      required: true
+    - name: username
+      description: The account username.
+      type: 3 # string
+      required: false
+    - name: tag
+      description: The account tag.
+      type: 3 # string
+      required: false
