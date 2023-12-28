@@ -2,3 +2,4 @@ airflow/logs/
 docker-compose.yaml
 .DS_Store
 .env
+commands.json
