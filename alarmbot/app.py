@@ -1,6 +1,6 @@
-import src
+from src.process_request import run
 
 
 def handler(event, context):
-    response = src.process_request.run(event)
+    response = run(event)
     return response

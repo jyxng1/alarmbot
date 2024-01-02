@@ -126,3 +126,6 @@ def get_recent_summary(data, member):
         message_content = f"Error from Valorant API: {response.status_code}"
     
     return message_content
+
+def get_recent_full(data, member):
+    return "Not implemented yet"
