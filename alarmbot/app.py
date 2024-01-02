@@ -1,10 +1,18 @@
+
+# TODO: JUST LET THE HANDLER FUNCTION
+#       IF SOMETHING IS NEEDED, IMPORT FROM SRC
+#       THIS IS A MESS
+
+# import src
+# something = src.something()
+
 import json
 import os
 from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
 from dotenv import load_dotenv
 
-from val_api import help, default, get_rank
+from val_api import help, default, get_rank, get_recent_summary, get_recent_full
 
 
 load_dotenv()
@@ -30,6 +38,11 @@ def process_request(raw_request):
         message_content = get_rank(data, member)
     elif command_name == "help":
         message_content = help()
+    elif command_name == "recent":
+        if data.get('options').get('name') == 'summary':
+            message_content = get_recent_summary(data, member)
+        else:
+            message_content = get_recent_full(data, member)
     return message_content
 
 def handler(event, context):

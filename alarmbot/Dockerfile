@@ -1,13 +1,13 @@
-FROM public.ecr.aws/lambda/python:3.11
+FROM public.ecr.aws/lambda/python:3.9
 
 # Copy requirements.txt
-COPY requirements.txt ${LAMBDA_TASK_ROOT}
+COPY src/ ${LAMBDA_TASK_ROOT}/src
 
 # Install the specified packages
-RUN pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -e src
 
 # Copy all files in ./app
-COPY app/ ${LAMBDA_TASK_ROOT}/
+COPY app.py ${LAMBDA_TASK_ROOT}/app.py
 
 # Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
-CMD [ "main.handler" ]
+CMD [ "app.handler" ]
