@@ -1,0 +1,165 @@
+- name: help
+  type: 1 # slash command
+  description: Displays a list of available commands.
+
+- name: default
+  type: 1 # slash command
+  description: Sets a default user account to retrieve info from.
+  options:
+    - name: username
+      description: The account username.
+      type: 3 # string
+      required: true
+    - name: tag
+      description: The account tag.
+      type: 3 # string
+      required: true
+
+- name: rank
+  type: 1 # slash command
+  description: Retrieves the current rank and rank rating of the requested user.
+  options:
+    - name: username
+      description: The account username.
+      type: 3 # string
+      required: false
+    - name: tag
+      description: The account tag.
+      type: 3 # string
+      required: false
+
+- name: recent
+  description: Retrieves stats from the most recent match of a selected game mode.
+  options:
+    - name: summary
+      description: Retrieves individual player performance statistics.
+      type: 1 # subcommand
+      options:
+        - name: username
+          description: The account username.
+          type: 3 # string
+          required: false
+        - name: tag
+          description: The account tag.
+          type: 3 # string
+          required: false
+        - name: mode
+          description: The game mode.
+          type: 3 # string
+          required: false
+          choices:
+            - name: Competitive
+              value: competitive
+            - name: Unrated
+              value: unrated
+            - name: Swiftplay
+              value: swiftplay
+            - name: Deathmatch
+              value: deathmatch
+            - name: Team Deathmatch
+              value: teamdeathmatch
+            - name: Custom
+              value: custom
+            - name: Spike Rush
+              value: spikerush
+            - name: Escalation
+              value: escalation
+            - name: Snowball Fight
+              value: snowballfight
+            - name: Replication
+              value: replication
+        - name: map
+          description: The map.
+          type: 3 # string
+          required: false
+          choices:
+            - name: Ascent
+              value: Ascent
+            - name: Bind
+              value: Bind
+            - name: Breeze
+              value: Breeze
+            - name: Fracture
+              value: Fracture
+            - name: Haven
+              value: Haven
+            - name: Icebox
+              value: Icebox
+            - name: Pearl
+              value: Pearl
+            - name: Split
+              value: Split
+            - name: Sunset
+              value: Sunset
+            - name: District
+              value: District
+            - name: Kasbah
+              value: Kasbah
+            - name: Piazza
+              value: Piazza
+    - name: full
+      description: Retrieves all player performance statistics.
+      type: 1 # subcommand
+      options:
+        - name: username
+          description: The account username.
+          type: 3 # string
+          required: false
+        - name: tag
+          description: The account tag.
+          type: 3 # string
+          required: false
+        - name: mode
+          description: The game mode.
+          type: 3 # string
+          required: false
+          choices:
+            - name: Competitive
+              value: competitive
+            - name: Unrated
+              value: unrated
+            - name: Swiftplay
+              value: swiftplay
+            - name: Deathmatch
+              value: deathmatch
+            - name: Team Deathmatch
+              value: teamdeathmatch
+            - name: Custom
+              value: custom
+            - name: Spike Rush
+              value: spikerush
+            - name: Escalation
+              value: escalation
+            - name: Snowball Fight
+              value: snowballfight
+            - name: Replication
+              value: replication
+        - name: map
+          description: The map.
+          type: 3 # string
+          required: false
+          choices:
+            - name: Ascent
+              value: Ascent
+            - name: Bind
+              value: Bind
+            - name: Breeze
+              value: Breeze
+            - name: Fracture
+              value: Fracture
+            - name: Haven
+              value: Haven
+            - name: Icebox
+              value: Icebox
+            - name: Pearl
+              value: Pearl
+            - name: Split
+              value: Split
+            - name: Sunset
+              value: Sunset
+            - name: District
+              value: District
+            - name: Kasbah
+              value: Kasbah
+            - name: Piazza
+              value: Piazza

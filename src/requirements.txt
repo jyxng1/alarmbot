@@ -1,4 +1,0 @@
-pynacl
-python-dotenv
-requests
-boto3

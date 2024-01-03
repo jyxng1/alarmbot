@@ -1,0 +1,6 @@
+.env
+.env.template
+README.md
+Dockerfile
+src/README.md
+commands/
