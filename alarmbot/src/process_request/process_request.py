@@ -1,5 +1,6 @@
 import json
 import os
+import traceback
 from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
 from dotenv import load_dotenv
@@ -18,10 +19,22 @@ def verify_signature(event, raw_body):
     verify_key = VerifyKey(bytes.fromhex(PUBLIC_KEY))
     verify_key.verify(message, bytes.fromhex(auth_sig))
 
+def kill_switch(member):
+    load_dotenv()
+    MAINTENANCE_MODE = os.environ.get("MAINTENANCE_MODE")
+    if MAINTENANCE_MODE == "ON" and member["user"]["id"] != "256918782734237698":
+        return True
+    else:
+        return False
+
 def send_command(raw_request):
     data = raw_request["data"]
     member = raw_request["member"]
     command_name = data["name"]
+
+    if kill_switch(member):
+        message_content = "Bot is currently under maintenance. Please try again later."
+        return message_content
 
     if command_name == "default":
         message_content = default(data, member)
@@ -30,7 +43,7 @@ def send_command(raw_request):
     elif command_name == "help":
         message_content = help()
     elif command_name == "recent":
-        if data.get('options').get('name') == 'summary':
+        if data.get('options')[0].get('name') == 'summary':
             message_content = get_recent_summary(data, member)
         else:
             message_content = get_recent_full(data, member)
@@ -52,8 +65,8 @@ def run(event):
     else:
         try:
             message_content = send_command(raw_request)
-        except Exception as e:
-            message_content = f"Request error: {e}"
+        except Exception:
+            message_content = f"Request error: {traceback.format_exc()}"
 
         response_data = {
             "type": 4,

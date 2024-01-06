@@ -1,19 +1,9 @@
 import requests
-from .utils import CONSTANTS, get_item_from_dynamodb
+from .utils import CONSTANTS, get_user_info
 
 
 def get_rank(data, member):
-    if data.get('options') is None:
-        item = get_item_from_dynamodb(member.get('user').get('id'))
-        if item:
-            username = item.get('ValorantUsername')
-            tag = item.get('ValorantTag')
-        else:
-            message_content = "Please set a default account first or specify a username and tag"
-            return message_content
-    else:
-        username = data.get('options')[0].get('value')
-        tag = data.get('options')[1].get('value')
+    username, tag = get_user_info(data.get('options'), member)
 
     response = requests.get(f"{CONSTANTS['API_URL']}/valorant/v2/mmr/na/{username}/{tag}")
 
