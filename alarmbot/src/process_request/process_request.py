@@ -1,10 +1,11 @@
 import json
 import os
+import traceback
 from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
 from dotenv import load_dotenv
 
-from ..val_api import help, default, get_rank, get_recent_summary, get_recent_full
+from ..ui import help, default, get_rank, get_recent_summary, get_recent_full
 
 
 def verify_signature(event, raw_body):
@@ -18,10 +19,20 @@ def verify_signature(event, raw_body):
     verify_key = VerifyKey(bytes.fromhex(PUBLIC_KEY))
     verify_key.verify(message, bytes.fromhex(auth_sig))
 
+def maintenance_switch(member):
+    load_dotenv()
+    maintenance_mode = os.environ.get("MAINTENANCE_MODE")
+    allowlist = os.environ.get("USER_MAINTENANCE_ALLOW_LIST").split()
+    return maintenance_mode != "ON" or member["user"]["id"] in allowlist
+
 def send_command(raw_request):
     data = raw_request["data"]
     member = raw_request["member"]
     command_name = data["name"]
+
+    if maintenance_switch(member):
+        message_content = "Bot is currently under maintenance. Please try again later."
+        return message_content
 
     if command_name == "default":
         message_content = default(data, member)
@@ -30,7 +41,7 @@ def send_command(raw_request):
     elif command_name == "help":
         message_content = help()
     elif command_name == "recent":
-        if data.get('options').get('name') == 'summary':
+        if data.get('options')[0].get('name') == 'summary':
             message_content = get_recent_summary(data, member)
         else:
             message_content = get_recent_full(data, member)
@@ -52,8 +63,8 @@ def run(event):
     else:
         try:
             message_content = send_command(raw_request)
-        except Exception as e:
-            message_content = f"Request error: {e}"
+        except Exception:
+            message_content = f"Request error: {traceback.format_exc()}"
 
         response_data = {
             "type": 4,

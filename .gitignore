@@ -483,8 +483,9 @@ $RECYCLE.BIN/
 
 
 
-airflow/logs/
+airflow
 docker-compose.yaml
 .DS_Store
 .env
 commands.json
+localtest
