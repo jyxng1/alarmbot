@@ -19,20 +19,18 @@ def verify_signature(event, raw_body):
     verify_key = VerifyKey(bytes.fromhex(PUBLIC_KEY))
     verify_key.verify(message, bytes.fromhex(auth_sig))
 
-def kill_switch(member):
+def maintenance_switch(member):
     load_dotenv()
-    MAINTENANCE_MODE = os.environ.get("MAINTENANCE_MODE")
-    if MAINTENANCE_MODE == "ON" and member["user"]["id"] != "256918782734237698":
-        return True
-    else:
-        return False
+    maintenance_mode = os.environ.get("MAINTENANCE_MODE")
+    allowlist = os.environ.get("USER_MAINTENANCE_ALLOW_LIST").split()
+    return maintenance_mode != "ON" or member["user"]["id"] in allowlist
 
 def send_command(raw_request):
     data = raw_request["data"]
     member = raw_request["member"]
     command_name = data["name"]
 
-    if kill_switch(member):
+    if maintenance_switch(member):
         message_content = "Bot is currently under maintenance. Please try again later."
         return message_content
 

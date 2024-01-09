@@ -11,17 +11,12 @@ def get_item_from_dynamodb(primary_key_value):
     table = dynamodb.Table('Alarmbot')
     key_value = {'DiscordUserID': primary_key_value}
 
-    try:
-        response = table.get_item(Key=key_value)
-        if 'Item' in response:
-            item = response['Item']
-        else:
-            return None
-    except Exception as e:
+    response = table.get_item(Key=key_value)
+    if 'Item' in response:
+        return response['Item']
+    else:
         return None
     
-    return item
-
 def get_user_info(options, member):
     if options is None or not options or (options and options[0].get('name') != "username" and options[1].get('name') != "tag"):
         item = get_item_from_dynamodb(member.get('user').get('id'))
